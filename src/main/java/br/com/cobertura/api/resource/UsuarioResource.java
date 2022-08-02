@@ -1,7 +1,8 @@
 package br.com.cobertura.api.resource;
 
-import br.com.cobertura.api.domain.Usuario;
+import br.com.cobertura.api.domain.dto.UsuarioDTO;
 import br.com.cobertura.api.service.UsuarioService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class UsuarioResource {
 
     @Autowired
+    private ModelMapper mapper;
+
+    @Autowired
     private UsuarioService usuarioService;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Usuario> findById(@PathVariable Integer id) {
-        return ResponseEntity.ok().body(usuarioService.findById(id));
+    public ResponseEntity<UsuarioDTO> findById(@PathVariable Integer id) {
+        return ResponseEntity.ok().body(mapper.map(usuarioService.findById(id), UsuarioDTO.class));
     }
 
 }

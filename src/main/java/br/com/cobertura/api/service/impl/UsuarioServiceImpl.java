@@ -4,6 +4,7 @@ import br.com.cobertura.api.domain.Usuario;
 import br.com.cobertura.api.domain.dto.UsuarioDTO;
 import br.com.cobertura.api.repository.UsuarioRepository;
 import br.com.cobertura.api.service.UsuarioService;
+import br.com.cobertura.api.service.exceptions.DataIntegratyViolationException;
 import br.com.cobertura.api.service.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario create(UsuarioDTO obj) {
+        findByEmail(obj);
         return usuarioRepository.save(mapper.map(obj, Usuario.class));
+    }
+
+    private void findByEmail(UsuarioDTO obj) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(obj.getEmail());
+        if(usuario.isPresent()) {
+            throw  new DataIntegratyViolationException("E-mail já cadastrado no sistema.");
+        }
     }
 }

@@ -1,9 +1,11 @@
 package br.com.cobertura.api.service.impl;
 
 import br.com.cobertura.api.domain.Usuario;
+import br.com.cobertura.api.domain.dto.UsuarioDTO;
 import br.com.cobertura.api.repository.UsuarioRepository;
 import br.com.cobertura.api.service.UsuarioService;
 import br.com.cobertura.api.service.exceptions.ObjectNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,9 @@ import java.util.Optional;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
+
+    @Autowired
+    private ModelMapper mapper;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -25,5 +30,10 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
+    }
+
+    @Override
+    public Usuario create(UsuarioDTO obj) {
+        return usuarioRepository.save(mapper.map(obj, Usuario.class));
     }
 }

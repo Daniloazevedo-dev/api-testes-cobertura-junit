@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class UsuarioServiceImplTest {
@@ -144,11 +144,11 @@ class UsuarioServiceImplTest {
     }
 
     @Test
-    void update() {
-    }
-
-    @Test
-    void delete() {
+    void deleteWithSuccess() {
+        when(usuarioRepository.findById(anyInt())).thenReturn(optionalUsuario);
+        doNothing().when(usuarioRepository).deleteById(anyInt());
+        usuarioService.delete(ID);
+        verify(usuarioRepository, times(1)).deleteById(anyInt());
     }
 
 
